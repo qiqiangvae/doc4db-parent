@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>doc4db-parent</artifactId>
+        <groupId>com.qingcha.tech</groupId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+    <artifactId>doc4db-sample</artifactId>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.compiler.encoding>UTF-8</maven.compiler.encoding>
+    </properties>
+    <dependencies>
+        <dependency>
+            <groupId>com.qingcha.tech</groupId>
+            <artifactId>doc4db-core</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>com.qingcha.tech</groupId>
+                <artifactId>doc4db-maven-plugin</artifactId>
+                <version>1.0-SNAPSHOT</version>
+                <configuration>
+                    <host>localhost:3306</host>
+                    <user>root</user>
+                    <password>password</password>
+                    <database>databaseName</database>
+                    <output>target/databaseName.md</output>
+                    <templateFile>src/main/resources/demo.ftl</templateFile>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>
