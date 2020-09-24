@@ -15,15 +15,26 @@
         <maven.compiler.encoding>UTF-8</maven.compiler.encoding>
     </properties>
     <dependencies>
+        <!--如果使用代码方式，则需要加入如下依赖-->
         <dependency>
             <groupId>com.qingcha.tech</groupId>
             <artifactId>doc4db-core</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
     <build>
         <plugins>
+            <!--插件方式使用示例-->
             <plugin>
                 <groupId>com.qingcha.tech</groupId>
                 <artifactId>doc4db-maven-plugin</artifactId>
@@ -31,11 +42,18 @@
                 <configuration>
                     <host>localhost:3306</host>
                     <user>root</user>
-                    <password>password</password>
-                    <database>databaseName</database>
-                    <output>target/databaseName.md</output>
-                    <templateFile>src/main/resources/demo.ftl</templateFile>
+                    <password>mypassword</password>
+                    <database>doc4db-demo</database>
+                    <output>target/doc4db-demo.md</output>
+                    <templateFile>src/main/resources/sampleDocTemplate.ftl</templateFile>
                 </configuration>
+                <dependencies>
+                    <dependency>
+                        <groupId>mysql</groupId>
+                        <artifactId>mysql-connector-java</artifactId>
+                        <version>8.0.20</version>
+                    </dependency>
+                </dependencies>
             </plugin>
         </plugins>
     </build>

@@ -1,5 +1,7 @@
-package com.qingcha.tech.doc4db.core;
+package com.qingcha.tech.doc4db.sample;
 
+import com.qingcha.tech.doc4db.core.Doc4DatabaseConfiguration;
+import com.qingcha.tech.doc4db.core.Doc4DatabaseGenerator;
 import org.junit.Test;
 
 
@@ -7,7 +9,7 @@ import org.junit.Test;
  * @author qiqiang
  * @date 2020-09-23 5:54 下午
  */
-public class MainTest {
+public class SampleMainTest {
     public static final String HOST = "localhost:3306";
     public static final String USER = "root";
     public static final String PASSWORD = "mypassword";
@@ -28,12 +30,5 @@ public class MainTest {
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
-
-    @Test
-    public void resourceTest() {
-        System.out.println(this.getClass().getResource(""));
-        System.out.println(this.getClass().getResource("/"));
-        System.out.println(this.getClass().getResource("/"));
     }
 }

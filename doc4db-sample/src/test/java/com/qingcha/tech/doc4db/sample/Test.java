@@ -11,7 +11,7 @@ public class Test {
         Test test = new Test();
         System.out.println(test.getClass().getResource(""));
         System.out.println(test.getClass().getResource("/"));
-        System.out.println(Thread.currentThread().getContextClassLoader().getResource("demo.ftl"));
+        System.out.println(Thread.currentThread().getContextClassLoader().getResource("sampleDocTemplate.ftl"));
         System.out.println(Doc4DatabaseGenerator.class.getClassLoader().getResource(""));
     }
 }

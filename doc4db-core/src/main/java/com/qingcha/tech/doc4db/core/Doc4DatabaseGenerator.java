@@ -47,7 +47,7 @@ public class Doc4DatabaseGenerator implements Generator {
 
     private List<TableMateInfo> getTables(DatabaseMetaData metaData) throws SQLException {
         ArrayList<TableMateInfo> tableMateInfoList = new ArrayList<>();
-        ResultSet tableSet = metaData.getTables("health_catalog", "%", "%", new String[]{"TABLE"});
+        ResultSet tableSet = metaData.getTables(doc4DatabaseConfiguration.getDatabaseName(), "%", "%", new String[]{"TABLE"});
         while (tableSet.next()) {
             String tableName = tableSet.getString("TABLE_NAME");
             String tableComment = tableSet.getString("REMARKS");
