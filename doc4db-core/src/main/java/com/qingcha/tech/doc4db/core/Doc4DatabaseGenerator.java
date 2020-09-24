@@ -39,7 +39,7 @@ public class Doc4DatabaseGenerator implements Generator {
         DatabaseMetaData metaData = connection.getMetaData();
         List<TableMateInfo> tables = getTables(metaData);
         for (TableMateInfo table : tables) {
-            List<TableLineInfo> tableLineInfoList = getTableLineInfoData(connection, table.getTableName());
+            List<TableLineInfo> tableLineInfoList = getTableLineInfoData(metaData, connection, table.getTableName());
             table.setTableLineInfoList(tableLineInfoList);
         }
         outputDoc(metaData, tables);
@@ -97,25 +97,25 @@ public class Doc4DatabaseGenerator implements Generator {
         return DriverManager.getConnection(url, user, password);
     }
 
-    private List<TableLineInfo> getTableLineInfoData(Connection conn, String tableName) throws ClassNotFoundException, SQLException {
+    private List<TableLineInfo> getTableLineInfoData(DatabaseMetaData metaData, Connection conn, String tableName) throws ClassNotFoundException, SQLException {
         List<TableLineInfo> tableLineInfoList = new ArrayList<>();
         //3.操作数据库，实现增删改查
         Statement stmt = conn.createStatement();
-        ResultSet rs = stmt.executeQuery("show columns from " + tableName);
+        ResultSet rs = stmt.executeQuery("show full columns from " + tableName);
         while (rs.next()) {
             String field = rs.getString("Field");
             String type = rs.getString("Type");
             String none = rs.getString("Null");
             String key = rs.getString("Key");
             String defaultValue = rs.getString("Default");
-            String extra = rs.getString("Extra");
+            String comment = rs.getString("Comment");
             TableLineInfo tableLineInfo = new TableLineInfo();
             tableLineInfo.setField(field);
             tableLineInfo.setType(type);
             tableLineInfo.setNone(none);
             tableLineInfo.setKey(key);
             tableLineInfo.setDefaultValue(defaultValue);
-            tableLineInfo.setExtra(extra);
+            tableLineInfo.setComment(comment);
             tableLineInfoList.add(tableLineInfo);
         }
         return tableLineInfoList;

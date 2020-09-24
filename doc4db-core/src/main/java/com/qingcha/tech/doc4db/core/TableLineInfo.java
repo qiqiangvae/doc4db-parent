@@ -10,7 +10,7 @@ public class TableLineInfo {
     private String none;
     private String key;
     private String defaultValue;
-    private String extra;
+    private String comment;
 
     public String getField() {
         return field;
@@ -52,12 +52,12 @@ public class TableLineInfo {
         this.defaultValue = defaultValue;
     }
 
-    public String getExtra() {
-        return extra;
+    public String getComment() {
+        return comment;
     }
 
-    public void setExtra(String extra) {
-        this.extra = extra;
+    public void setComment(String comment) {
+        this.comment = comment;
     }
 
     @Override
@@ -68,7 +68,7 @@ public class TableLineInfo {
                 ", none='" + none + '\'' +
                 ", key='" + key + '\'' +
                 ", defaultValue='" + defaultValue + '\'' +
-                ", extra='" + extra + '\'' +
+                ", extra='" + comment + '\'' +
                 '}';
     }
 }
