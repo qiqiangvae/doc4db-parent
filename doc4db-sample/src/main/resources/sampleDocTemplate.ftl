@@ -8,11 +8,10 @@
 ### ${tableMateInfo.tableName}
 ${tableMateInfo.tableComment}
 
-#### 字段说明
-|字段|类型|是否为空|索引默认值|额外信息|
-|---|---|---|---|---|---|
+|Field|Type|Null|Key|Comment|
+|---|---|---|---|---|
 <#list tableMateInfo.tableLineInfoList as info>
-|${info.field!}|${info.type!}|${info.none!}|${info.key!}|${info.defaultValue!}|${info.extra!}|
+|${info.field!}|${info.type!}|${info.none!}|${info.key!}|${info.comment!}|
 </#list>
 
 </#list>

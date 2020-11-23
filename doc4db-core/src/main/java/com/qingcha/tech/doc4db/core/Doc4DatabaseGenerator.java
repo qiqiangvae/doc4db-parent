@@ -74,9 +74,9 @@ public class Doc4DatabaseGenerator implements Generator {
             logger.info("templateFile:[{}]", templateFile);
         }
         //创建一个Writer对象，指定生成的文件保存的路径及文件名。
-        Map<String, Object> templateModel = new HashMap<>();
-        templateModel.put("databaseName", doc4DatabaseConfiguration.getDatabaseName());
-        templateModel.put("tableMateInfoList", tableMateInfoList);
+        Doc4DatabaseModel templateModel = new Doc4DatabaseModel();
+        templateModel.setDatabaseName(doc4DatabaseConfiguration.getDatabaseName());
+        templateModel.setTableMateInfoList(tableMateInfoList);
         Writer out = new FileWriter(new File(doc4DatabaseConfiguration.getOutput()));
         //调用模板对象的process方法生成静态文件。需要两个参数数据集和writer对象。
         template.process(templateModel, out);
@@ -101,7 +101,7 @@ public class Doc4DatabaseGenerator implements Generator {
         List<TableLineInfo> tableLineInfoList = new ArrayList<>();
         //3.操作数据库，实现增删改查
         Statement stmt = conn.createStatement();
-        ResultSet rs = stmt.executeQuery("show full columns from " + tableName);
+        ResultSet rs = stmt.executeQuery("SHOW FULL COLUMNS FROM " + tableName);
         while (rs.next()) {
             String field = rs.getString("Field");
             String type = rs.getString("Type");
