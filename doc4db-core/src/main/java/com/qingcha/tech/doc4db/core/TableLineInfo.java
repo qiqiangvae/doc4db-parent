@@ -5,12 +5,12 @@ package com.qingcha.tech.doc4db.core;
  * @date 2020-09-23 7:05 下午
  */
 public class TableLineInfo {
-    private String field;
-    private String type;
-    private String none;
-    private String key;
-    private String defaultValue;
-    private String comment;
+    private String field = "";
+    private String type = "";
+    private String none = "";
+    private String key = "";
+    private String defaultValue = "";
+    private String comment = "";
 
     public String getField() {
         return field;

@@ -40,10 +40,10 @@
                 <artifactId>doc4db-maven-plugin</artifactId>
                 <version>1.0-SNAPSHOT</version>
                 <configuration>
-                    <host>localhost:3306</host>
+<!--                    <url>jdbc:mysql://mycloud:3307/soul</url>-->
+                    <url>jdbc:sqlite:/Users/qiqiang/workspace/code/python/chinese-poetry/ci/ci.db</url>
                     <user>root</user>
-                    <password>mypassword</password>
-                    <database>doc4db-demo</database>
+                    <password>root</password>
                     <output>target/doc4db-demo.md</output>
                     <templateFile>src/main/resources/sampleDocTemplate.ftl</templateFile>
                 </configuration>

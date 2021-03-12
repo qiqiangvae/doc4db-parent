@@ -1,4 +1,4 @@
-# ${databaseName!}自定义模版
+# ${databaseName!}自定义模版 ${version!}
 
 ## 数据库基本信息
 

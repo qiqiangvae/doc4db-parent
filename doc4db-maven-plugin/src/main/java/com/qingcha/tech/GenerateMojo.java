@@ -19,19 +19,20 @@ import java.io.File;
 @Mojo(name = "generate")
 public class GenerateMojo extends AbstractMojo {
     private final Logger logger = LoggerFactory.getLogger(GenerateMojo.class);
+    private final static String SEPARATOR = File.separator;
 
-    @Parameter(name = "host", defaultValue = "localhost")
-    private String host;
+    @Parameter(name = "url", required = true)
+    private String url;
     @Parameter(name = "user", required = true)
     private String user;
     @Parameter(name = "password", required = true)
     private String password;
-    @Parameter(name = "database", required = true)
-    private String database;
     @Parameter(name = "output", required = true)
     private String output;
     @Parameter(name = "templateFile")
     private String templateFile;
+    @Parameter(name = "version")
+    private String version;
 
     @Parameter(defaultValue = "${project.basedir}", readonly = true)
     private File basedir;
@@ -40,22 +41,21 @@ public class GenerateMojo extends AbstractMojo {
     public void execute() throws MojoExecutionException, MojoFailureException {
         logger.info("正在生成文档");
         logger.info(basedir.toString());
-        Doc4DatabaseConfiguration doc4DatabaseConfiguration = new Doc4DatabaseConfiguration(host, user, password, database);
-        System.out.println(this.getClass().getClassLoader().getResource(""));
-        doc4DatabaseConfiguration.setClassLoader(this.getClass().getClassLoader());
-        doc4DatabaseConfiguration.setOutput(output);
+        Doc4DatabaseConfiguration doc4DatabaseConfiguration = new Doc4DatabaseConfiguration(url, user, password);
+        File file = null;
         if (templateFile != null) {
-            if (!templateFile.startsWith("/")) {
-                templateFile = "/" + templateFile;
+            if (!templateFile.startsWith(SEPARATOR)) {
+                templateFile = SEPARATOR + templateFile;
             }
-            doc4DatabaseConfiguration.setTemplateFile(new File(basedir + templateFile));
+            file = new File(basedir + templateFile);
         }
         Doc4DatabaseGenerator doc4DatabaseGenerator = new Doc4DatabaseGenerator(doc4DatabaseConfiguration);
-        doc4DatabaseGenerator.setPrintLog(true);
+        doc4DatabaseGenerator.configFile(file, output);
         try {
             doc4DatabaseGenerator.generate();
         } catch (Exception e) {
             e.printStackTrace();
+            throw new MojoExecutionException("生成文档失败", e);
         }
     }
 }

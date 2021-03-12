@@ -1,23 +1,17 @@
-# ${databaseName!}
+# ${databaseName!} ${version!}
 
 ## 数据库基本信息
 
-<br>
 
 ## 数据表信息
 
-<br>
 
 <#list tableMateInfoList as tableMateInfo>
 ### ${tableMateInfo.tableName}
 
-<br>
-
 ${tableMateInfo.tableComment}
 
 #### 字段说明
-
-<br>
 
 |字段|类型|是否为空|索引|默认值|备注|
 |---|---|---|---|---|---|

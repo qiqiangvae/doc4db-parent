@@ -8,7 +8,7 @@ import java.util.List;
  */
 public class TableMateInfo {
     private String tableName;
-    private String tableComment;
+    private String tableComment = "";
     private List<TableLineInfo> tableLineInfoList;
 
     public String getTableName() {

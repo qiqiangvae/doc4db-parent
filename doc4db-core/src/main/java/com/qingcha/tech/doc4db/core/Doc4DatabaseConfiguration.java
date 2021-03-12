@@ -1,7 +1,5 @@
 package com.qingcha.tech.doc4db.core;
 
-import java.io.File;
-
 /**
  * 配置
  *
@@ -9,36 +7,23 @@ import java.io.File;
  * @date 2020-09-23 5:52 下午
  */
 public class Doc4DatabaseConfiguration {
-    private String host;
+    private String url;
     private String user;
     private String password;
-    private String databaseName;
-    private File templateFile;
-    private String output;
-    private ClassLoader classLoader;
 
-    public Doc4DatabaseConfiguration(String host, String user, String password, String databaseName) {
-        this.host = host;
+
+    public Doc4DatabaseConfiguration(String url, String user, String password) {
+        this.url = url;
         this.user = user;
         this.password = password;
-        this.databaseName = databaseName;
-        this.classLoader = Thread.currentThread().getContextClassLoader();
     }
 
-    public String getDatabaseName() {
-        return databaseName;
+    public String getUrl() {
+        return url;
     }
 
-    public void setDatabaseName(String databaseName) {
-        this.databaseName = databaseName;
-    }
-
-    public String getHost() {
-        return host;
-    }
-
-    public void setHost(String host) {
-        this.host = host;
+    public void setUrl(String url) {
+        this.url = url;
     }
 
     public String getUser() {
@@ -57,39 +42,4 @@ public class Doc4DatabaseConfiguration {
         this.password = password;
     }
 
-    public File getTemplateFile() {
-        return templateFile;
-    }
-
-    public void setTemplateFile(File templateFile) {
-        this.templateFile = templateFile;
-    }
-
-    public String getOutput() {
-        return output;
-    }
-
-    public void setOutput(String output) {
-        this.output = output;
-    }
-
-    public ClassLoader getClassLoader() {
-        return classLoader;
-    }
-
-    public void setClassLoader(ClassLoader classLoader) {
-        this.classLoader = classLoader;
-    }
-
-    @Override
-    public String toString() {
-        return "Doc4DatabaseConfiguration{" +
-                "host='" + host + '\'' +
-                ", user='" + user + '\'' +
-                ", password='" + password + '\'' +
-                ", databaseName='" + databaseName + '\'' +
-                ", templateFile='" + templateFile + '\'' +
-                ", output='" + output + '\'' +
-                '}';
-    }
 }

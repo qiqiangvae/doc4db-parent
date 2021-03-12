@@ -1,5 +1,7 @@
 package com.qingcha.tech.doc4db.core;
 
+import com.qingcha.tech.doc4db.core.worker.GenerateWorker;
+import com.qingcha.tech.doc4db.core.worker.GenerateWorkerFactory;
 import freemarker.cache.FileTemplateLoader;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
@@ -11,11 +13,6 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Writer;
-import java.sql.*;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 /**
  * @author qiqiang
@@ -23,46 +20,32 @@ import java.util.Map;
  */
 public class Doc4DatabaseGenerator implements Generator {
     private final Logger logger = LoggerFactory.getLogger(Doc4DatabaseGenerator.class);
+    private final GenerateWorker generateWorker;
     private final Doc4DatabaseConfiguration doc4DatabaseConfiguration;
-    private boolean printLog;
+
+    private File templateFile;
+    private String output;
 
 
     public Doc4DatabaseGenerator(Doc4DatabaseConfiguration doc4DatabaseConfiguration) {
         this.doc4DatabaseConfiguration = doc4DatabaseConfiguration;
-        System.out.println(this.doc4DatabaseConfiguration.toString());
+        generateWorker = findWorker();
+    }
+
+    private GenerateWorker findWorker() {
+        return new GenerateWorkerFactory().create(doc4DatabaseConfiguration);
     }
 
 
     @Override
     public void generate() throws Exception {
-        Connection connection = getConnection();
-        DatabaseMetaData metaData = connection.getMetaData();
-        List<TableMateInfo> tables = getTables(metaData);
-        for (TableMateInfo table : tables) {
-            List<TableLineInfo> tableLineInfoList = getTableLineInfoData(metaData, connection, table.getTableName());
-            table.setTableLineInfoList(tableLineInfoList);
-        }
-        outputDoc(metaData, tables);
+        Doc4DatabaseModel templateModel = generateWorker.create();
+        print(templateModel);
     }
 
-    private List<TableMateInfo> getTables(DatabaseMetaData metaData) throws SQLException {
-        ArrayList<TableMateInfo> tableMateInfoList = new ArrayList<>();
-        ResultSet tableSet = metaData.getTables(doc4DatabaseConfiguration.getDatabaseName(), "%", "%", new String[]{"TABLE"});
-        while (tableSet.next()) {
-            String tableName = tableSet.getString("TABLE_NAME");
-            String tableComment = tableSet.getString("REMARKS");
-            TableMateInfo tableMateInfo = new TableMateInfo();
-            tableMateInfo.setTableName(tableName);
-            tableMateInfo.setTableComment(tableComment);
-            tableMateInfoList.add(tableMateInfo);
-        }
-        return tableMateInfoList;
-    }
-
-    private void outputDoc(DatabaseMetaData metaData, List<TableMateInfo> tableMateInfoList) throws IOException, TemplateException {
+    private void print(Doc4DatabaseModel templateModel) throws IOException, TemplateException {
         Configuration configuration = new Configuration(Configuration.DEFAULT_INCOMPATIBLE_IMPROVEMENTS);
         configuration.setDefaultEncoding("utf-8");
-        File templateFile = doc4DatabaseConfiguration.getTemplateFile();
         Template template;
         if (templateFile == null) {
             configuration.setClassLoaderForTemplateLoading(this.getClass().getClassLoader(), "");
@@ -73,55 +56,18 @@ public class Doc4DatabaseGenerator implements Generator {
             template = configuration.getTemplate(templateFile.getName());
             logger.info("templateFile:[{}]", templateFile);
         }
-        //创建一个Writer对象，指定生成的文件保存的路径及文件名。
-        Doc4DatabaseModel templateModel = new Doc4DatabaseModel();
-        templateModel.setDatabaseName(doc4DatabaseConfiguration.getDatabaseName());
-        templateModel.setTableMateInfoList(tableMateInfoList);
-        Writer out = new FileWriter(new File(doc4DatabaseConfiguration.getOutput()));
+        File file = new File(output);
+        Writer out = new FileWriter(file);
         //调用模板对象的process方法生成静态文件。需要两个参数数据集和writer对象。
         template.process(templateModel, out);
+        logger.info("文档生成完成:[{}]", file.getPath());
         //关闭writer对象。
         out.flush();
         out.close();
     }
 
-    private Connection getConnection() throws ClassNotFoundException, SQLException {
-        String host = doc4DatabaseConfiguration.getHost();
-        String user = doc4DatabaseConfiguration.getUser();
-        String password = doc4DatabaseConfiguration.getPassword();
-        String databaseName = doc4DatabaseConfiguration.getDatabaseName();
-        //1.加载驱动程序
-        Class.forName("com.mysql.cj.jdbc.Driver");
-        //2. 获得数据库连接
-        String url = "jdbc:mysql://" + host + "/" + databaseName;
-        return DriverManager.getConnection(url, user, password);
-    }
-
-    private List<TableLineInfo> getTableLineInfoData(DatabaseMetaData metaData, Connection conn, String tableName) throws ClassNotFoundException, SQLException {
-        List<TableLineInfo> tableLineInfoList = new ArrayList<>();
-        //3.操作数据库，实现增删改查
-        Statement stmt = conn.createStatement();
-        ResultSet rs = stmt.executeQuery("SHOW FULL COLUMNS FROM " + tableName);
-        while (rs.next()) {
-            String field = rs.getString("Field");
-            String type = rs.getString("Type");
-            String none = rs.getString("Null");
-            String key = rs.getString("Key");
-            String defaultValue = rs.getString("Default");
-            String comment = rs.getString("Comment");
-            TableLineInfo tableLineInfo = new TableLineInfo();
-            tableLineInfo.setField(field);
-            tableLineInfo.setType(type);
-            tableLineInfo.setNone(none);
-            tableLineInfo.setKey(key);
-            tableLineInfo.setDefaultValue(defaultValue);
-            tableLineInfo.setComment(comment);
-            tableLineInfoList.add(tableLineInfo);
-        }
-        return tableLineInfoList;
-    }
-
-    public void setPrintLog(boolean printLog) {
-        this.printLog = printLog;
+    public void configFile(File templateFile, String output) {
+        this.templateFile = templateFile;
+        this.output = output;
     }
 }

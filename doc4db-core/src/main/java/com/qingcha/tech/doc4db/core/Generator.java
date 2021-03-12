@@ -7,4 +7,6 @@ package com.qingcha.tech.doc4db.core;
 public interface Generator {
 
     void generate() throws Exception;
+
+
 }

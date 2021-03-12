@@ -22,7 +22,6 @@
             <version>3.6.0</version>
             <scope>provided</scope>
         </dependency>
-
         <dependency>
             <groupId>com.qingcha.tech</groupId>
             <artifactId>doc4db-core</artifactId>
