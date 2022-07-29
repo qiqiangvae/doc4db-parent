@@ -6,7 +6,7 @@ import java.util.List;
  * @author qiqiang
  * @date 2020-10-09 5:25 下午
  */
-public class Doc4DatabaseModel{
+public class Doc4DatabaseModel {
     private String databaseName;
     private String version;
     private List<TableMateInfo> tableMateInfoList;
@@ -34,4 +34,5 @@ public class Doc4DatabaseModel{
     public String getVersion() {
         return version;
     }
+
 }

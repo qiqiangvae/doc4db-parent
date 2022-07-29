@@ -10,6 +10,7 @@ public class Doc4DatabaseConfiguration {
     private String url;
     private String user;
     private String password;
+    private String table;
 
 
     public Doc4DatabaseConfiguration(String url, String user, String password) {
@@ -42,4 +43,11 @@ public class Doc4DatabaseConfiguration {
         this.password = password;
     }
 
+    public String getTable() {
+        return table;
+    }
+
+    public void setTable(String table) {
+        this.table = table;
+    }
 }

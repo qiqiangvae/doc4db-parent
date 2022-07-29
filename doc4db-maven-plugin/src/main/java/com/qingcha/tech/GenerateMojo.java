@@ -2,6 +2,7 @@ package com.qingcha.tech;
 
 import com.qingcha.tech.doc4db.core.Doc4DatabaseConfiguration;
 import com.qingcha.tech.doc4db.core.Doc4DatabaseGenerator;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
@@ -33,15 +34,19 @@ public class GenerateMojo extends AbstractMojo {
     private String templateFile;
     @Parameter(name = "version")
     private String version;
+    @Parameter(name = "table")
+    private String table;
 
     @Parameter(defaultValue = "${project.basedir}", readonly = true)
     private File basedir;
 
     @Override
     public void execute() throws MojoExecutionException, MojoFailureException {
-        logger.info("正在生成文档");
-        logger.info(basedir.toString());
         Doc4DatabaseConfiguration doc4DatabaseConfiguration = new Doc4DatabaseConfiguration(url, user, password);
+        if (StringUtils.isBlank(table)) {
+            table = ".*";
+        }
+        doc4DatabaseConfiguration.setTable(table);
         File file = null;
         if (templateFile != null) {
             if (!templateFile.startsWith(SEPARATOR)) {
@@ -49,6 +54,7 @@ public class GenerateMojo extends AbstractMojo {
             }
             file = new File(basedir + templateFile);
         }
+        logger.info("正在生成文档，参数[table]:{}", table);
         Doc4DatabaseGenerator doc4DatabaseGenerator = new Doc4DatabaseGenerator(doc4DatabaseConfiguration);
         doc4DatabaseGenerator.configFile(file, output);
         try {

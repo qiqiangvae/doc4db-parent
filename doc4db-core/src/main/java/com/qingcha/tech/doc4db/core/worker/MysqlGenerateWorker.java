@@ -4,6 +4,8 @@ import com.qingcha.tech.doc4db.core.Doc4DatabaseConfiguration;
 import com.qingcha.tech.doc4db.core.Doc4DatabaseModel;
 import com.qingcha.tech.doc4db.core.TableLineInfo;
 import com.qingcha.tech.doc4db.core.TableMateInfo;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.net.URI;
 import java.sql.*;
@@ -11,12 +13,14 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Pattern;
 
 /**
  * @author qiqiang
  */
 @WorkerSchema("mysql")
 public class MysqlGenerateWorker extends GenerateWorker {
+    private final Logger logger = LoggerFactory.getLogger(MysqlGenerateWorker.class);
     private String database;
 
 
@@ -29,13 +33,18 @@ public class MysqlGenerateWorker extends GenerateWorker {
         Connection connection = getConnection();
         DatabaseMetaData metaData = connection.getMetaData();
         List<TableMateInfo> tables = getTables(metaData);
+        Pattern pattern = Pattern.compile(getDoc4DatabaseConfiguration().getTable());
+        List<TableMateInfo> availableTables = new ArrayList<>();
         for (TableMateInfo table : tables) {
-            List<TableLineInfo> tableLineInfoList = getTableLineInfoData(metaData, connection, table.getTableName());
-            table.setTableLineInfoList(tableLineInfoList);
+            if (pattern.matcher(table.getTableName()).matches()) {
+                List<TableLineInfo> tableLineInfoList = getTableLineInfoData(metaData, connection, table.getTableName());
+                table.setTableLineInfoList(tableLineInfoList);
+                availableTables.add(table);
+            }
         }
         Doc4DatabaseModel templateModel = new Doc4DatabaseModel();
         templateModel.setDatabaseName(database);
-        templateModel.setTableMateInfoList(tables);
+        templateModel.setTableMateInfoList(availableTables);
         String version = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMddHHmmss"));
         templateModel.setVersion(version);
         return templateModel;

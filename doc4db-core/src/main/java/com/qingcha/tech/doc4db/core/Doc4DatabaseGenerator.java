@@ -1,5 +1,6 @@
 package com.qingcha.tech.doc4db.core;
 
+import com.qingcha.tech.doc4db.core.method.UnderlineToHumpMethod;
 import com.qingcha.tech.doc4db.core.worker.GenerateWorker;
 import com.qingcha.tech.doc4db.core.worker.GenerateWorkerFactory;
 import freemarker.cache.FileTemplateLoader;
